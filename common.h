@@ -16,5 +16,4 @@ struct ResposeData
 	bool Success;
 	std::string Response;
 };
-
-_declspec(selectany) std::map<int, ROLE> Database;
+std::map<int, ROLE> Database;
