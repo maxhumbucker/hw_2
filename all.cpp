@@ -103,7 +103,7 @@ response.Response = "";
 response.Success = false;
 
 auto User = std::find_if(Database.begin(), Database.end(),
-	[&newUser](const std::pair<int, ROLE>& user) { return user.first == newUser; });
+	[&newUser](const UserData& user) { return user.ID == newUser; });
 
 if (User != Database.end())
 {
@@ -112,9 +112,9 @@ if (User != Database.end())
 }
 
 auto Sender = std::find_if(Database.begin(), Database.end(),
-	[&sender](const std::pair<int, ROLE>& user) { return user.first == sender; });
+	[&sender](const UserData& user) { return user.ID == sender; });
 
-if (Sender == Database.end() || Sender->second != ROLE::Admin)
+if (Sender == Database.end() || Sender->role != ROLE::Admin)
 {
 	response.Response = "ERROR: Sender not found or not an admin!";
 	return response;
@@ -134,10 +134,10 @@ response.Response = "";
 response.Success = false;
 
 auto Sender = std::find_if(Database.begin(), Database.end(),
-	[&sender](const std::pair<int, ROLE>& user) { return user.first == sender; });
+	[&sender](const UserData& user) { return user.ID == sender; });
 
 auto User = std::find_if(Database.begin(), Database.end(),
-	[&user](const std::pair<int, ROLE>& user) { return user.first == user; });
+	[&user](const UserData& user) { return user.ID == user; });
 
 if (Sender == Database.end() || User == Database.end())
 {
@@ -145,20 +145,20 @@ if (Sender == Database.end() || User == Database.end())
 	return response;
 }
 
-if (Sender->second != ROLE::Admin && Sender->second != ROLE::Moderator)
+if (Sender->role != ROLE::Admin && Sender->role != ROLE::Moderator)
 {
 	response.Response = "ERROR: Sender isn't admin or moderator!";
 	return response;
 }
 
-if (User->second == ROLE::Admin || User->second == ROLE::Moderator)
+if (User->role == ROLE::Admin || User->role == ROLE::Moderator)
 {
 	response.Response = "ERROR: User is admin or moderator!";
 	return response;
 }
 
 
-User->second = ROLE::Moderator;
+User->role = ROLE::Moderator;
 response.Response = "User " + std::to_string(user) + " is moderator.";
 response.Success = true;
 return response;
@@ -171,10 +171,10 @@ response.Response = "";
 response.Success = false;
 
 auto Sender = std::find_if(Database.begin(), Database.end(),
-	[&sender](const auto& pair) { return pair.first == sender; });
+    [&sender](const UserData& user) { return user.ID == sender; });
 
 auto User = std::find_if(Database.begin(), Database.end(),
-	[&user](const auto& pair) { return pair.first == user; });
+    [&user](const UserData& user) { return user.ID == user; });
 
 if (Sender == Database.end() || User == Database.end())
 {
@@ -182,19 +182,19 @@ if (Sender == Database.end() || User == Database.end())
 	return response;
 }
 
-if (Sender->second != ROLE::Admin)
+if (Sender->role != ROLE::Admin)
 {
 	response.Response = "ERROR: Sender isn't admin!";
 	return response;
 }
 
-if (User->second == ROLE::Admin)
+if (User->role == ROLE::Admin)
 {
 	response.Response = "ERROR: User is admin!";
 	return response;
 }
 
-User->second = ROLE::Admin;
+User->role = ROLE::Admin;
 response.Response = "User " + std::to_string(user) + " is admin.";
 response.Success = true;
 
